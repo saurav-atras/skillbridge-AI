@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillBridge AI | Enterprise Career & Internship Intelligence Platform</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen selection:bg-indigo-500 selection:text-white">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+  <!-- Navbar -->
+  <nav class="bg-white/90 backdrop-filter backdrop-blur-lg border-b border-slate-200/80 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex justify-between items-center">
+      <div class="flex items-center space-x-3 cursor-pointer" id="nav-brand">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 text-white font-bold text-xl">
+          <i class="fa-solid fa-brain"></i>
+        </div>
+        <div>
+          <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 bg-clip-text text-transparent">SkillBridge AI</span>
+          <span class="block text-[10px] font-semibold tracking-wider text-indigo-600 uppercase">Pro Edition</span>
+        </div>
+      </div>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+        <a href="#internships" class="hover:text-indigo-600 transition">Internships</a>
+        <a href="#ai-tools" class="hover:text-indigo-600 transition">AI Studio</a>
+        <a href="#roadmaps" class="hover:text-indigo-600 transition">Roadmaps</a>
+        <a href="#projects" class="hover:text-indigo-600 transition">Projects</a>
+        <a href="#faq" class="hover:text-indigo-600 transition">FAQ</a>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center space-x-3">
+        <button id="search-trigger-btn" class="p-2 text-slate-500 hover:text-indigo-600 transition rounded-lg hover:bg-slate-100" title="Quick Search">
+          <i class="fa-solid fa-magnifying-glass text-lg"></i>
+        </button>
+        
+        <div id="auth-buttons" class="flex items-center space-x-2">
+          <button id="open-login-btn" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-indigo-600 transition">Log In</button>
+          <button id="open-signup-btn" class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md shadow-indigo-600/20 transition hover:scale-[1.02] active:scale-[0.98]">
+            Get Started Free
+          </button>
+        </div>
+
+        <div id="user-menu" class="hidden items-center space-x-3">
+          <div class="flex items-center space-x-2 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-xl">
+            <i class="fa-solid fa-circle-user text-indigo-600 text-base"></i>
+            <span id="user-email-display" class="text-xs font-bold text-indigo-900"></span>
+          </div>
+          <button id="logout-btn" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition" title="Logout">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="relative overflow-hidden bg-slate-900 text-white py-20 lg:py-28 px-4">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(79,70,229,0.25),transparent_50%)]"></div>
+    <div class="max-w-7xl mx-auto relative z-10 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold mb-6 backdrop-blur-md">
+        <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        AI-Powered Career Intelligence v2.5
+      </div>
+      
+      <h1 class="text-4xl sm:text-6xl font-extrabold max-w-4xl mx-auto leading-tight tracking-tight">
+        Bridge Your Skill Gaps & Land Your <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Dream Tech Internship</span>
+      </h1>
+      
+      <p class="mt-6 text-slate-300 text-lg sm:text-xl max-w-2xl mx-auto font-normal leading-relaxed">
+        Real-time ATS resume scanning, Gemini AI mentoring, and curated industry opportunities in one unified intelligence platform.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="mt-10 max-w-2xl mx-auto bg-white/10 p-2 rounded-2xl border border-white/15 backdrop-blur-xl flex flex-col sm:flex-row gap-2">
+        <div class="flex-grow flex items-center px-3 bg-white/10 rounded-xl text-slate-200">
+          <i class="fa-solid fa-briefcase text-slate-400 mr-3"></i>
+          <input type="text" id="hero-search-input" placeholder="Search roles e.g. Frontend, Machine Learning, Python..." class="bg-transparent w-full py-3 text-sm focus:outline-none placeholder-slate-400 text-white">
+        </div>
+        <button id="hero-search-btn" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2">
+          <span>Search Roles</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto border-t border-slate-800 pt-8 text-center">
+        <div>
+          <p class="text-3xl font-extrabold text-white">500+</p>
+          <p class="text-xs font-medium text-slate-400 mt-1">Verified Internships</p>
+        </div>
+        <div>
+          <p class="text-3xl font-extrabold text-white">98%</p>
+          <p class="text-xs font-medium text-slate-400 mt-1">ATS Scan Accuracy</p>
+        </div>
+        <div>
+          <p class="text-3xl font-extrabold text-white">24/7</p>
+          <p class="text-xs font-medium text-slate-400 mt-1">Gemini AI Guidance</p>
+        </div>
+        <div>
+          <p class="text-3xl font-extrabold text-white">₹18,500</p>
+          <p class="text-xs font-medium text-slate-400 mt-1">Avg. Monthly Stipend</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-grow space-y-24">
+
+    <!-- Section 1: Internships Explorer -->
+    <section id="internships">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Opportunities</span>
+          <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Featured Internships</h2>
+          <p class="text-slate-500 text-sm mt-1">Hand-picked openings from verified top tech companies.</p>
+        </div>
+        
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap gap-2 bg-slate-200/60 p-1.5 rounded-xl text-xs font-bold" id="internship-filters">
+          <button data-filter="all" class="filter-tab active-tab bg-white text-indigo-600 shadow-sm px-4 py-2 rounded-lg transition">All Listings</button>
+          <button data-filter="remote" class="filter-tab text-slate-600 hover:text-indigo-600 px-4 py-2 rounded-lg transition">Remote Only</button>
+          <button data-filter="tech" class="filter-tab text-slate-600 hover:text-indigo-600 px-4 py-2 rounded-lg transition">Software / Web</button>
+          <button data-filter="data" class="filter-tab text-slate-600 hover:text-indigo-600 px-4 py-2 rounded-lg transition">Data & AI</button>
+        </div>
+      </div>
+
+      <!-- Internship Cards Container -->
+      <div id="internships-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered Dynamically via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Section 2: AI Tools Suite -->
+    <section id="ai-tools" class="bg-gradient-to-b from-indigo-900 to-slate-900 rounded-3xl p-8 lg:p-12 text-white shadow-2xl relative overflow-hidden">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="bg-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-indigo-400/30">Career Intelligence Engine</span>
+        <h2 class="text-3xl lg:text-4xl font-extrabold mt-3">Interactive AI Tools Studio</h2>
+        <p class="text-slate-300 text-sm sm:text-base mt-2">Test your job readiness and get real-time AI mentoring instantly.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Smart ATS Scanner -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 flex flex-col justify-between hover:border-indigo-400/50 transition group">
+          <div>
+            <div class="w-12 h-12 bg-indigo-500/20 text-indigo-300 rounded-xl flex items-center justify-center text-xl mb-5 group-hover:scale-110 transition">
+              <i class="fa-solid fa-file-contract"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Smart ATS Resume Scanner</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-6">Compare your resume against real job descriptions to identify missing technical keywords and boost match score.</p>
+          </div>
+          <button id="open-ats-tool" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-3 rounded-xl transition flex items-center justify-center gap-2">
+            <span>Launch Scanner</span>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+          </button>
+        </div>
+
+        <!-- Skill Gap Calculator -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 flex flex-col justify-between hover:border-indigo-400/50 transition group">
+          <div>
+            <div class="w-12 h-12 bg-purple-500/20 text-purple-300 rounded-xl flex items-center justify-center text-xl mb-5 group-hover:scale-110 transition">
+              <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Skill Gap Calculator</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-6">Interactive proficiency sliders to measure your readiness level and output a customized 30-day preparation roadmap.</p>
+          </div>
+          <button id="open-skill-tool" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs py-3 rounded-xl transition flex items-center justify-center gap-2">
+            <span>Analyze Skill Gap</span>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+          </button>
+        </div>
+
+        <!-- Gemini Chatbot -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 flex flex-col justify-between hover:border-indigo-400/50 transition group">
+          <div>
+            <div class="w-12 h-12 bg-pink-500/20 text-pink-300 rounded-xl flex items-center justify-center text-xl mb-5 group-hover:scale-110 transition">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Gemini AI Career Mentor</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-6">Conversational AI mentor for mock interview questions, portfolio guidance, and real-time career advice.</p>
+          </div>
+          <button id="open-chatbot-tool" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs py-3 rounded-xl transition flex items-center justify-center gap-2">
+            <span>Start Chatting</span>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Career Roadmaps -->
+    <section id="roadmaps">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Guided Pathways</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Interactive Career Roadmaps</h2>
+        <p class="text-slate-500 text-sm mt-1">Select your target engineering role to unlock curated learning milestones.</p>
+      </div>
+
+      <!-- Path Selector -->
+      <div class="flex flex-wrap justify-center gap-3 mb-8" id="roadmap-selector">
+        <button data-path="fullstack" class="path-btn active-path bg-indigo-600 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition">Full-Stack Web Dev</button>
+        <button data-path="dataai" class="path-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 font-bold text-xs px-5 py-2.5 rounded-xl transition">Data Science & AI</button>
+        <button data-path="cloud" class="path-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 font-bold text-xs px-5 py-2.5 rounded-xl transition">Cloud & DevOps</button>
+      </div>
+
+      <!-- Dynamic Roadmap Box -->
+      <div id="roadmap-display" class="bg-white rounded-2xl p-8 border border-slate-200/80 shadow-sm">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- Section 4: Project Ideas & Portfolio Builder -->
+    <section id="projects" class="bg-slate-100/70 rounded-3xl p-8 lg:p-12 border border-slate-200/60">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Build to Get Hired</span>
+          <h2 class="text-3xl font-extrabold text-slate-900 mt-1">High-Impact Portfolio Projects</h2>
+          <p class="text-slate-500 text-sm mt-1">Projects recruiters actively look for in resume evaluations.</p>
+        </div>
+        <button id="random-project-btn" class="mt-4 md:mt-0 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+          <i class="fa-solid fa-shuffle text-indigo-600"></i>
+          <span>Surprise Me</span>
+        </button>
+      </div>
+
+      <div id="projects-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- Section 5: Student Testimonials -->
+    <section id="reviews">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Success Stories</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Loved by 10,000+ Students</h2>
+        <p class="text-slate-500 text-sm mt-1">Here is how SkillBridge AI helped candidates secure paid internships.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex text-amber-400 text-xs mb-3 space-x-1">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed italic mb-4">"The ATS scanner picked up 4 missing backend keywords in my resume. Fixed them and got shortlisted at TechNova within 3 days!"</p>
+          </div>
+          <div class="flex items-center space-x-3 pt-4 border-t border-slate-100">
+            <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">AR</div>
+            <div>
+              <p class="text-xs font-bold text-slate-900">Aman Sharma</p>
+              <p class="text-[10px] text-slate-500">Full-Stack Intern @ TechNova</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex text-amber-400 text-xs mb-3 space-x-1">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed italic mb-4">"The Gemini Career Mentor gave me exact mock questions for my React interview. Kept me confident throughout!"</p>
+          </div>
+          <div class="flex items-center space-x-3 pt-4 border-t border-slate-100">
+            <div class="w-8 h-8 rounded-full bg-purple-600 text-white font-bold text-xs flex items-center justify-center">PS</div>
+            <div>
+              <p class="text-xs font-bold text-slate-900">Priya Singh</p>
+              <p class="text-[10px] text-slate-500">Frontend Intern @ WebStudio</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex text-amber-400 text-xs mb-3 space-x-1">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed italic mb-4">"Skill gap calculator showed me I was weak in SQL joins. Followed the 30-day plan and cracked my data internship!"</p>
+          </div>
+          <div class="flex items-center space-x-3 pt-4 border-t border-slate-100">
+            <div class="w-8 h-8 rounded-full bg-pink-600 text-white font-bold text-xs flex items-center justify-center">RK</div>
+            <div>
+              <p class="text-xs font-bold text-slate-900">Rohan Verma</p>
+              <p class="text-[10px] text-slate-500">Data Analyst @ DataMetrics</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Interactive FAQ Accordion -->
+    <section id="faq" class="max-w-4xl mx-auto">
+      <div class="text-center mb-10">
+        <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Help Center</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="space-y-4" id="faq-accordion">
+        <div class="faq-item border border-slate-200 rounded-2xl bg-white overflow-hidden transition">
+          <button class="faq-toggle w-full p-5 text-left font-bold text-slate-900 text-sm flex justify-between items-center">
+            <span>Is SkillBridge AI completely free to use for students?</span>
+            <i class="fa-solid fa-plus text-indigo-600 text-xs transition-transform"></i>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            Yes! All primary features including internship search, ATS resume scanning, skill gap calculations, and Gemini AI career mentoring are 100% free for students.
+          </div>
+        </div>
+
+        <div class="faq-item border border-slate-200 rounded-2xl bg-white overflow-hidden transition">
+          <button class="faq-toggle w-full p-5 text-left font-bold text-slate-900 text-sm flex justify-between items-center">
+            <span>How accurate is the ATS Resume Matcher?</span>
+            <i class="fa-solid fa-plus text-indigo-600 text-xs transition-transform"></i>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            Our ATS matcher uses natural language token matching trained against over 1,000 standard engineering job descriptions to give real-time keyword coverage.
+          </div>
+        </div>
+
+        <div class="faq-item border border-slate-200 rounded-2xl bg-white overflow-hidden transition">
+          <button class="faq-toggle w-full p-5 text-left font-bold text-slate-900 text-sm flex justify-between items-center">
+            <span>Are the listed internships verified?</span>
+            <i class="fa-solid fa-plus text-indigo-600 text-xs transition-transform"></i>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            Yes, all listings undergo automated verification to ensure valid stipends, legitimate company domain registration, and active recruiting status.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: Newsletter CTA Box -->
+    <section class="bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 rounded-3xl p-8 sm:p-12 text-white text-center shadow-xl">
+      <h2 class="text-3xl font-extrabold">Get Weekly Internship Alerts Directly</h2>
+      <p class="text-indigo-100 text-sm mt-2 max-w-xl mx-auto">Join 15,000+ tech students receiving top remote and stipend-backed internship openings every Monday.</p>
+      
+      <form id="newsletter-form" class="mt-8 max-w-md mx-auto flex flex-col sm:flex-row gap-2">
+        <input type="email" id="newsletter-email" required placeholder="Enter your email address..." class="px-4 py-3 rounded-xl text-slate-900 text-sm font-medium w-full focus:outline-none">
+        <button type="submit" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-6 py-3 rounded-xl text-sm transition shrink-0">
+          Subscribe Free
+        </button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 text-xs border-t border-slate-800 py-12 px-4 mt-auto">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <div class="flex items-center space-x-2 text-white font-bold text-lg mb-3">
+          <i class="fa-solid fa-brain text-indigo-400"></i>
+          <span>SkillBridge AI</span>
+        </div>
+        <p class="leading-relaxed">Empowering students with AI-driven career intelligence to bridge the gap between classroom and industry.</p>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white text-sm mb-3">Quick Navigation</h4>
+        <ul class="space-y-2">
+          <li><a href="#internships" class="hover:text-white transition">Featured Internships</a></li>
+          <li><a href="#ai-tools" class="hover:text-white transition">AI Resume Scanner</a></li>
+          <li><a href="#roadmaps" class="hover:text-white transition">Career Roadmaps</a></li>
+          <li><a href="#projects" class="hover:text-white transition">Portfolio Ideas</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white text-sm mb-3">Resources</h4>
+        <ul class="space-y-2">
+          <li><button class="hover:text-white transition footer-modal-btn" data-type="ats">ATS Guidelines</button></li>
+          <li><button class="hover:text-white transition footer-modal-btn" data-type="interview">Interview Handbook</button></li>
+          <li><button class="hover:text-white transition footer-modal-btn" data-type="terms">Terms of Service</button></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white text-sm mb-3">Connect With Us</h4>
+        <div class="flex space-x-4 text-base text-slate-300 mb-4">
+          <a href="#" class="hover:text-indigo-400 transition" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="#" class="hover:text-indigo-400 transition" title="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="hover:text-indigo-400 transition" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" class="hover:text-indigo-400 transition" title="Discord"><i class="fa-brands fa-discord"></i></a>
+        </div>
+        <p class="text-[11px] text-slate-500">© 2026 SkillBridge AI Inc. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative">
+      <button id="close-login-btn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times text-lg"></i></button>
+      <h3 class="text-2xl font-extrabold text-slate-900 mb-1">Welcome Back</h3>
+      <p class="text-xs text-slate-500 mb-6">Log in to track your applications and AI analysis.</p>
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+          <input type="email" id="login-email" required placeholder="name@domain.com" class="w-full border rounded-xl p-3 text-sm focus:outline-indigo-600">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+          <input type="password" id="login-password" required placeholder="••••••••" class="w-full border rounded-xl p-3 text-sm focus:outline-indigo-600">
+        </div>
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-bold text-sm shadow-md transition">Log In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div id="signup-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative">
+      <button id="close-signup-btn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times text-lg"></i></button>
+      <h3 class="text-2xl font-extrabold text-slate-900 mb-1">Create Account</h3>
+      <p class="text-xs text-slate-500 mb-6">Unlock free unlimited AI tools & internship matches.</p>
+      <form id="signup-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Full Email</label>
+          <input type="email" id="signup-email" required placeholder="student@university.edu" class="w-full border rounded-xl p-3 text-sm focus:outline-indigo-600">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+          <input type="password" id="signup-password" required placeholder="At least 6 characters" class="w-full border rounded-xl p-3 text-sm focus:outline-indigo-600">
+        </div>
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-bold text-sm shadow-md transition">Sign Up Free</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dynamic AI & Interactive Modal -->
+  <div id="ai-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-6 relative max-h-[90vh] overflow-y-auto">
+      <button id="close-ai-btn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 z-10"><i class="fa-solid fa-times text-xl"></i></button>
+      <div id="ai-modal-content"></div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
